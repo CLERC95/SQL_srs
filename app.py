@@ -10,6 +10,14 @@ Spaced Repetition System SQL practice
 """
 )
 
+with st.sidebar:
+    option = st.selectbox(
+        "What would you like to review ?",
+        ["Joins", "GoupBy", "Windows Functions"],
+        index=None,
+        placeholder="Select a theme",
+    )
+
 csv = """
 beverage,price
 orange juice,2.5
@@ -52,11 +60,5 @@ with tab1:
 
 with tab2:
     st.write(answer)
-
-option = st.selectbox(
-    "What would you like to review ?",
-    ["Joins", "GoupBy", "Windows Functions"],
-    index=None,
-    placeholder="Select a theme",
-)
+    
 st.write("You selected: ", option)
