@@ -17,6 +17,7 @@ with st.sidebar:
         index=None,
         placeholder="Select a theme",
     )
+    st.write("You selected: ", option)
 
 csv = """
 beverage,price
@@ -60,5 +61,3 @@ with tab1:
 
 with tab2:
     st.write(answer)
-    
-st.write("You selected: ", option)
