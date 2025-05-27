@@ -1,29 +1,31 @@
-import streamlit as st
-import pandas as pd
-import duckdb
+# pylint: disable=(missing-module-docstring)
 import io
 
-csv = """
+import duckdb
+import pandas as pd
+import streamlit as st
+
+CSV = """
 beverage,price
 orange juice,2.5
 Expresso,2
 Tea,3
 """
-beverages = pd.read_csv(io.StringIO(csv))
+beverages = pd.read_csv(io.StringIO(CSV))
 
-csv2 = """
+CSV2 = """
 food_item,food_price
 cookie ,2.5
 chocolatine,2
 muffin,3
 """
-food_items = pd.read_csv(io.StringIO(csv2))
+food_items = pd.read_csv(io.StringIO(CSV2))
 
-answer = """
+ANSWER = """
 SELECT * FROM beverages
 CROSS JOIN food_items
 """
-solution_df = duckdb.sql(answer).df()
+solution_df = duckdb.sql(ANSWER).df()
 
 st.header("Entre votre code:")
 
@@ -72,4 +74,4 @@ with tab1:
     st.dataframe(solution_df)
 
 with tab2:
-    st.write(answer)
+    st.write(ANSWER)
