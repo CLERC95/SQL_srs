@@ -15,6 +15,7 @@ data = {
     "exercice_name": ["beverages_and_food", "simple_window"],
     "tables": [["beverages", "food_items"], "simple_window"],
     "last_reviewed": ["1970-01-01", "1970-01-01"],
+    "answer": [],
 }
 
 memory_state_df = pd.DataFrame(data)

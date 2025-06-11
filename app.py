@@ -38,12 +38,18 @@ if sql_query:
 
 tab1, tab2 = st.tabs(["Tables", "Solution"])
 
-with tab1:
-    exercice_tables = exercice.loc[0, "tables"]
-    for table in exercice_tables:
-        st.write(f"Table: {table}")
-        df_table = con.execute(f"SELECT * FROM {table}").df()
-        st.dataframe(df_table)
+try:
+    with tab1:
+        exercice_tables = exercice.loc[0, "tables"]
+        for table in exercice_tables:
+            st.write(f"Table: {table}")
+            df_table = con.execute(f"SELECT * FROM {table}").df()
+            st.dataframe(df_table)
 
-with tab2:
-    st.write("La réponse")
+    with tab2:
+        exercice_name = exercice.loc[0, "exercice_name"]
+        with open(f"answers/{exercice_name}.sql", "r", encoding="UTF-8") as f:
+            answer = f.read()
+        st.write(answer)
+except KeyError:
+    st.write("No exercices seleced")
