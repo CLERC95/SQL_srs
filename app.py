@@ -15,15 +15,15 @@ with st.sidebar:
     st.write("You selected: ", theme)
 
     exercice = con.execute(f"SELECT * FROM memory_state WHERE theme = '{theme}'").df()
-    st.write(exercice)
+    st.dataframe(exercice)
 
 st.header("Entre votre code:")
 
 sql_query = st.text_area(label="Entrez votre input", key="user_input")
-# if sql_query:
-#     result = duckdb.sql(sql_query).df()
-#     st.dataframe(result)
-#     # st.write(f"Vous avez entrez la requête suivante: {sql_query}")
+if sql_query:
+    result = con.execute(sql_query).df()
+    st.dataframe(result)
+    st.write(f"Vous avez entrez la requête suivante: {sql_query}")
 
 # try:
 #     result = result[solution_df.columns]
@@ -36,15 +36,14 @@ sql_query = st.text_area(label="Entrez votre input", key="user_input")
 #     st.write(f"Result has a {n_lignes_diff} lines difference with the solution")
 
 
-# tab1, tab2 = st.tabs(["Tables", "solution"])
+tab1, tab2 = st.tabs(["Tables", "Solution"])
 
-# with tab1:
-#     st.write("Table: beverages")
-#     st.dataframe(beverages)
-#     st.write("Table: food_items")
-#     st.dataframe(food_items)
-#     st.write("Table attendue:")
-#     st.dataframe(solution_df)
+with tab1:
+    exercice_tables = exercice.loc[0, "tables"]
+    for table in exercice_tables:
+        st.write(f"Table: {table}")
+        df_table = con.execute(f"SELECT * FROM {table}").df()
+        st.dataframe(df_table)
 
-# with tab2:
-#     st.write(ANSWER)
+with tab2:
+    st.write("La réponse")

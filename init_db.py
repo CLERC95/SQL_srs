@@ -11,10 +11,10 @@ con = duckdb.connect(database="data/exercices_sql_tables.duckdb", read_only=Fals
 # ----------------------------------------------------------------------------------------------------------------------
 
 data = {
-    "theme" : ["cross_join"],
-    "exercice_name" : ["beverages_and_food"],
-    "tables" : [["beverages", "food_items"]],
-    "last_reviewed" : ["1970-01-01"]
+    "theme": ["cross_join", "windows_function"],
+    "exercice_name": ["beverages_and_food", "simple_window"],
+    "tables": [["beverages", "food_items"], "simple_window"],
+    "last_reviewed": ["1970-01-01", "1970-01-01"],
 }
 
 memory_state_df = pd.DataFrame(data)
@@ -31,7 +31,7 @@ Expresso,2
 Tea,3
 """
 beverages = pd.read_csv(io.StringIO(CSV))
-con.execute("CREATE TABLE IF NOT EXISTS berverages AS SELECT * FROM beverages")
+con.execute("CREATE TABLE IF NOT EXISTS beverages AS SELECT * FROM beverages")
 
 
 CSV2 = """
