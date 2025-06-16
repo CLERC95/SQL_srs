@@ -8,15 +8,14 @@ import pandas as pd
 con = duckdb.connect(database="data/exercices_sql_tables.duckdb", read_only=False)
 
 # ------------------------------------------------------------------------------------------------
-# LXERCICE LIST
+# EXERCICE LIST
 # ------------------------------------------------------------------------------------------------
 
 data = {
-    "theme": ["cross_join", "windows_function"],
-    "exercice_name": ["beverages_and_food", "simple_window"],
-    "tables": [["beverages", "food_items"], "simple_window"],
+    "theme": ["cross_join", "cross_join"],
+    "exercice_name": ["beverages_and_food", "sizes_and_trademarks"],
+    "tables": [["beverages", "food_items"], ["sizes", "trademarks"]],
     "last_reviewed": ["1970-01-01", "1970-01-01"],
-    "answer": [],
 }
 
 memory_state_df = pd.DataFrame(data)
@@ -34,7 +33,7 @@ Tea,3
 """
 beverages = pd.read_csv(io.StringIO(CSV))
 con.execute(
-    "CREATE OR REPLACE TABLE IF NOT EXISTS beverages AS SELECT * FROM beverages"
+    "CREATE TABLE IF NOT EXISTS beverages AS SELECT * FROM beverages"
 )
 
 
