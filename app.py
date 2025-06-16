@@ -17,6 +17,12 @@ with st.sidebar:
     exercice = con.execute(f"SELECT * FROM memory_state WHERE theme = '{theme}'").df()
     st.dataframe(exercice)
 
+    exercice_name = exercice.loc[0, "exercice_name"]
+    with open(f"answers/{exercice_name}.sql", "r", encoding="UTF-8") as f:
+        answer = f.read()
+
+    solution_df = con.execute(answer).df()
+
 st.header("Entre votre code:")
 
 sql_query = st.text_area(label="Entrez votre input", key="user_input")
@@ -25,15 +31,15 @@ if sql_query:
     st.dataframe(result)
     st.write(f"Vous avez entrez la requête suivante: {sql_query}")
 
-# try:
-#     result = result[solution_df.columns]
-#     st.dataframe(result.compare(solution_df))
-# except KeyError as e:
-#     st.write("Some columns are missing")
+    try:
+        result = result[solution_df.columns]
+        st.dataframe(result.compare(solution_df))
+    except KeyError as e:
+        st.write("Some columns are missing")
 
-# n_lignes_diff = abs(result.shape[0] - solution_df.shape[0])
-# if n_lignes_diff != 0:
-#     st.write(f"Result has a {n_lignes_diff} lines difference with the solution")
+    n_lignes_diff = abs(result.shape[0] - solution_df.shape[0])
+    if n_lignes_diff != 0:
+        st.write(f"Result has a {n_lignes_diff} lines difference with the solution")
 
 
 tab1, tab2 = st.tabs(["Tables", "Solution"])
@@ -47,9 +53,6 @@ try:
             st.dataframe(df_table)
 
     with tab2:
-        exercice_name = exercice.loc[0, "exercice_name"]
-        with open(f"answers/{exercice_name}.sql", "r", encoding="UTF-8") as f:
-            answer = f.read()
         st.write(answer)
 except KeyError:
     st.write("No exercices seleced")
