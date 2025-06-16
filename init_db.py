@@ -1,3 +1,4 @@
+# pylint: disable=(missing-module-docstring)
 import io
 
 import duckdb
@@ -32,7 +33,7 @@ Expresso,2
 Tea,3
 """
 beverages = pd.read_csv(io.StringIO(CSV))
-con.execute("CREATE TABLE IF NOT EXISTS beverages AS SELECT * FROM beverages")
+con.execute("CREATE OR REPLACE TABLE IF NOT EXISTS beverages AS SELECT * FROM beverages")
 
 
 CSV2 = """
