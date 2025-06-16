@@ -7,9 +7,9 @@ import pandas as pd
 
 con = duckdb.connect(database="data/exercices_sql_tables.duckdb", read_only=False)
 
-# ----------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------
 # LXERCICE LIST
-# ----------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------
 
 data = {
     "theme": ["cross_join", "windows_function"],
@@ -22,9 +22,9 @@ data = {
 memory_state_df = pd.DataFrame(data)
 con.execute("CREATE TABLE IF NOT EXISTS memory_state AS SELECT * FROM memory_state_df")
 
-# ----------------------------------------------------------------------------------------------------------------------
-# CROSS JOIN EXERCICES
-# ----------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------
+# CROSS JOIN EXERCICES 1
+# ------------------------------------------------------------------------------------------------
 
 CSV = """
 beverage,price
@@ -33,7 +33,9 @@ Expresso,2
 Tea,3
 """
 beverages = pd.read_csv(io.StringIO(CSV))
-con.execute("CREATE OR REPLACE TABLE IF NOT EXISTS beverages AS SELECT * FROM beverages")
+con.execute(
+    "CREATE OR REPLACE TABLE IF NOT EXISTS beverages AS SELECT * FROM beverages"
+)
 
 
 CSV2 = """
@@ -45,8 +47,26 @@ muffin,3
 food_items = pd.read_csv(io.StringIO(CSV2))
 con.execute("CREATE TABLE IF NOT EXISTS food_items AS SELECT * FROM food_items")
 
-ANSWER = """
-SELECT * FROM beverages
-CROSS JOIN food_items
+# ------------------------------------------------------------------------------------------------
+# CROSS JOIN EXERCICES 2
+# ------------------------------------------------------------------------------------------------
+
+SIZE = """
+size
+XS
+M
+L
+XL
 """
-solution_df = duckdb.sql(ANSWER).df()
+sizes = pd.read_csv(io.StringIO(SIZE))
+con.execute("CREATE TABLE IF NOT EXISTS size AS SELECT * FROM sizes")
+
+TRADEMARK = """
+trademark
+Nike
+Asphalte
+Abercrombie
+Lewis
+"""
+trademarks = pd.read_csv(io.StringIO(TRADEMARK))
+con.execute("CREATE TABLE IF NOT EXISTS trademark AS SELECT * FROM trademarks")
