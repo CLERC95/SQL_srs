@@ -4,7 +4,6 @@ import io
 import duckdb
 import pandas as pd
 
-
 con = duckdb.connect(database="data/exercices_sql_tables.duckdb", read_only=False)
 
 # ------------------------------------------------------------------------------------------------
