@@ -14,7 +14,12 @@ with st.sidebar:
     )
     st.write("You selected: ", theme)
 
-    exercice = con.execute(f"SELECT * FROM memory_state WHERE theme = '{theme}'").df()
+    exercice = (
+        con.execute(f"SELECT * FROM memory_state WHERE theme = '{theme}'")
+        .df()
+        .sort_values("last_reviewed")
+        .reset_index()
+    )
     st.dataframe(exercice)
 
     exercice_name = exercice.loc[0, "exercice_name"]

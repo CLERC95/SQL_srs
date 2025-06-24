@@ -15,7 +15,7 @@ data = {
     "theme": ["cross_join", "cross_join"],
     "exercice_name": ["beverages_and_food", "sizes_and_trademarks"],
     "tables": [["beverages", "food_items"], ["sizes", "trademarks"]],
-    "last_reviewed": ["1970-01-01", "1970-01-01"],
+    "last_reviewed": ["1980-01-01", "1978-01-01"],
 }
 
 memory_state_df = pd.DataFrame(data)
@@ -32,9 +32,7 @@ Expresso,2
 Tea,3
 """
 beverages = pd.read_csv(io.StringIO(CSV))
-con.execute(
-    "CREATE TABLE IF NOT EXISTS beverages AS SELECT * FROM beverages"
-)
+con.execute("CREATE TABLE IF NOT EXISTS beverages AS SELECT * FROM beverages")
 
 
 CSV2 = """
@@ -58,7 +56,7 @@ L
 XL
 """
 sizes = pd.read_csv(io.StringIO(SIZE))
-con.execute("CREATE TABLE IF NOT EXISTS size AS SELECT * FROM sizes")
+con.execute("CREATE TABLE IF NOT EXISTS sizes AS SELECT * FROM sizes")
 
 TRADEMARK = """
 trademark
@@ -68,4 +66,4 @@ Abercrombie
 Lewis
 """
 trademarks = pd.read_csv(io.StringIO(TRADEMARK))
-con.execute("CREATE TABLE IF NOT EXISTS trademark AS SELECT * FROM trademarks")
+con.execute("CREATE TABLE IF NOT EXISTS trademarks AS SELECT * FROM trademarks")
