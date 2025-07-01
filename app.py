@@ -1,7 +1,21 @@
 # pylint: disable=(missing-module-docstring)
+import logging
+import os
+
 import duckdb
 import streamlit as st
 
+if "data" not in os.listdir():
+    print("creating folder data")
+    logging.error(os.listdir())
+    logging.error("Creating folder data")
+    os.mkdir("data")
+
+if "exercices_sql_tables.duckdb" not in os.listdir("data"):
+    # pylint: disable=(w0122:exec-used, W1514:unspecified-encoding)
+    with open("init_db-py", encoding="uft-8") as f:
+        exec(f.read())
+    # subprocess.run(["python", "init_db.py"])
 
 con = duckdb.connect(database="data/exercices_sql_tables.duckdb", read_only=False)
 
@@ -12,13 +26,19 @@ with st.sidebar:
         index=None,
         placeholder="Select a theme",
     )
-    st.write("You selected: ", theme)
+
+    if theme:
+        st.write(f"You selected {theme}")
+        SELECT_EXERCICE_QUERY = f"SELECT * FROM memory_state WHERE theme = '{theme}'"
+
+    else:
+        SELECT_EXERCICE_QUERY = f"SELECT * FROM memory_state WHERE theme = '{theme}'"
 
     exercice = (
-        con.execute(f"SELECT * FROM memory_state WHERE theme = '{theme}'")
+        con.execute(SELECT_EXERCICE_QUERY)
         .df()
         .sort_values("last_reviewed")
-        .reset_index()
+        .reset_index(drop=True)
     )
     st.dataframe(exercice)
 
