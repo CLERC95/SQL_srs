@@ -1,6 +1,7 @@
 # pylint: disable=(missing-module-docstring)
 import logging
 import os
+from datetime import date, timedelta
 
 import duckdb
 import streamlit as st
@@ -66,6 +67,18 @@ if sql_query:
     n_lignes_diff = abs(result.shape[0] - solution_df.shape[0])
     if n_lignes_diff != 0:
         st.write(f"Result has a {n_lignes_diff} lines difference with the solution")
+
+for n_days in [2, 7, 21]:
+    if st.button(f"revoir dans {n_days} jours", key=f"review_button_{n_days}"):
+        next_review = date.today() + timedelta(days=n_days)
+        con.execute(
+            f"UPDATE memory_state SET last_reviewed = '{next_review}' WHERE exercice_name = '{exercice_name}'"
+        )
+        st.rerun()
+
+if st.button("Reset", key="Reset_button"):
+    con.execute("UPDATE memory_state SET last_reviewed = '1970-01-01'")
+    st.rerun()
 
 
 tab1, tab2 = st.tabs(["Tables", "Solution"])
