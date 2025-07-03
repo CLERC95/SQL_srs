@@ -33,7 +33,7 @@ with st.sidebar:
         SELECT_EXERCICE_QUERY = f"SELECT * FROM memory_state WHERE theme = '{theme}'"
 
     else:
-        SELECT_EXERCICE_QUERY = "SELECT * FROM memory_state'"
+        SELECT_EXERCICE_QUERY = "SELECT * FROM memory_state"
 
     exercice = (
         con.execute(SELECT_EXERCICE_QUERY)
