@@ -4,7 +4,9 @@ import io
 import duckdb
 import pandas as pd
 
-con = duckdb.connect(database="data/exercices_sql_tables.duckdb", read_only=False)
+con = duckdb.connect(
+    database="data/exercices_sql_tables.duckdb", read_only=False
+)
 
 # ------------------------------------------------------------------------------------------------
 # EXERCICE LIST
@@ -18,7 +20,9 @@ data = {
 }
 
 memory_state_df = pd.DataFrame(data)
-con.execute("CREATE TABLE IF NOT EXISTS memory_state AS SELECT * FROM memory_state_df")
+con.execute(
+    "CREATE TABLE IF NOT EXISTS memory_state AS SELECT * FROM memory_state_df"
+)
 
 # ------------------------------------------------------------------------------------------------
 # CROSS JOIN EXERCICES 1
@@ -41,7 +45,9 @@ chocolatine,2
 muffin,3
 """
 food_items = pd.read_csv(io.StringIO(CSV2))
-con.execute("CREATE TABLE IF NOT EXISTS food_items AS SELECT * FROM food_items")
+con.execute(
+    "CREATE TABLE IF NOT EXISTS food_items AS SELECT * FROM food_items"
+)
 
 # ------------------------------------------------------------------------------------------------
 # CROSS JOIN EXERCICES 2
@@ -65,4 +71,8 @@ Abercrombie
 Lewis
 """
 trademarks = pd.read_csv(io.StringIO(TRADEMARK))
-con.execute("CREATE TABLE IF NOT EXISTS trademarks AS SELECT * FROM trademarks")
+con.execute(
+    "CREATE TABLE IF NOT EXISTS trademarks AS SELECT * FROM trademarks"
+)
+
+con.close()

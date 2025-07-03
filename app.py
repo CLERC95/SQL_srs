@@ -1,24 +1,50 @@
 # pylint: disable=(missing-module-docstring)
+import logging
+import os
+from datetime import date, timedelta
+
 import duckdb
 import streamlit as st
 
+if "data" not in os.listdir():
+    print("creating folder data")
+    logging.error(os.listdir())
+    logging.error("Creating folder data")
+    os.mkdir("data")
 
-con = duckdb.connect(database="data/exercices_sql_tables.duckdb", read_only=False)
+if "exercices_sql_tables.duckdb" not in os.listdir("data"):
+    # pylint: disable=(w0122:exec-used, W1514:unspecified-encoding)
+    with open("init_db-py", encoding="uft-8") as f:
+        exec(f.read())
+    # subprocess.run(["python", "init_db.py"])
+
+con = duckdb.connect(
+    database="data/exercices_sql_tables.duckdb", read_only=False
+)
+list_theme_df = con.execute("SELECT DISTINCT theme FROM memory_state").df()
 
 with st.sidebar:
     theme = st.selectbox(
         "What would you like to review ?",
-        ["cross_join", "GoupBy", "Windows Functions"],
+        list_theme_df["theme"].unique(),
         index=None,
         placeholder="Select a theme",
     )
-    st.write("You selected: ", theme)
+
+    if theme:
+        st.write(f"You selected {theme}")
+        SELECT_EXERCICE_QUERY = (
+            f"SELECT * FROM memory_state WHERE theme = '{theme}'"
+        )
+
+    else:
+        SELECT_EXERCICE_QUERY = "SELECT * FROM memory_state"
 
     exercice = (
-        con.execute(f"SELECT * FROM memory_state WHERE theme = '{theme}'")
+        con.execute(SELECT_EXERCICE_QUERY)
         .df()
         .sort_values("last_reviewed")
-        .reset_index()
+        .reset_index(drop=True)
     )
     st.dataframe(exercice)
 
@@ -44,7 +70,22 @@ if sql_query:
 
     n_lignes_diff = abs(result.shape[0] - solution_df.shape[0])
     if n_lignes_diff != 0:
-        st.write(f"Result has a {n_lignes_diff} lines difference with the solution")
+        st.write(
+            f"Result has a {n_lignes_diff} lines difference with the solution"
+        )
+
+for n_days in [2, 7, 21]:
+    if st.button(f"revoir dans {n_days} jours", key=f"review_button_{n_days}"):
+        next_review = date.today() + timedelta(days=n_days)
+        con.execute(
+            # pylint: disable=(C0301)
+            f"UPDATE memory_state SET last_reviewed = '{next_review}' WHERE exercice_name = '{exercice_name}'"
+        )
+        st.rerun()
+
+if st.button("Reset", key="Reset_button"):
+    con.execute("UPDATE memory_state SET last_reviewed = '1970-01-01'")
+    st.rerun()
 
 
 tab1, tab2 = st.tabs(["Tables", "Solution"])
