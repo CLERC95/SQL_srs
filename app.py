@@ -18,7 +18,9 @@ if "exercices_sql_tables.duckdb" not in os.listdir("data"):
         exec(f.read())
     # subprocess.run(["python", "init_db.py"])
 
-con = duckdb.connect(database="data/exercices_sql_tables.duckdb", read_only=False)
+con = duckdb.connect(
+    database="data/exercices_sql_tables.duckdb", read_only=False
+)
 list_theme_df = con.execute("SELECT DISTINCT theme FROM memory_state").df()
 
 with st.sidebar:
@@ -31,7 +33,9 @@ with st.sidebar:
 
     if theme:
         st.write(f"You selected {theme}")
-        SELECT_EXERCICE_QUERY = f"SELECT * FROM memory_state WHERE theme = '{theme}'"
+        SELECT_EXERCICE_QUERY = (
+            f"SELECT * FROM memory_state WHERE theme = '{theme}'"
+        )
 
     else:
         SELECT_EXERCICE_QUERY = "SELECT * FROM memory_state"
@@ -66,12 +70,15 @@ if sql_query:
 
     n_lignes_diff = abs(result.shape[0] - solution_df.shape[0])
     if n_lignes_diff != 0:
-        st.write(f"Result has a {n_lignes_diff} lines difference with the solution")
+        st.write(
+            f"Result has a {n_lignes_diff} lines difference with the solution"
+        )
 
 for n_days in [2, 7, 21]:
     if st.button(f"revoir dans {n_days} jours", key=f"review_button_{n_days}"):
         next_review = date.today() + timedelta(days=n_days)
         con.execute(
+            # pylint: disable=(C0301)
             f"UPDATE memory_state SET last_reviewed = '{next_review}' WHERE exercice_name = '{exercice_name}'"
         )
         st.rerun()
